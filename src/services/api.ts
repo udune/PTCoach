@@ -1,9 +1,5 @@
 import axios, { AxiosInstance, AxiosResponse } from "axios";
 
-interface ImportMetaEnv {
-  VITE_API_BASE_URL: string;
-}
-
 // Axios 인스턴스 생성
 const api: AxiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
