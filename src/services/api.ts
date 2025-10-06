@@ -1,7 +1,7 @@
-import axios from "axios";
+import axios, { AxiosInstance, AxiosResponse } from "axios";
 
 // Axios 인스턴스 생성
-const api = axios.create({
+const api: AxiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
   timeout: 10000,
   headers: {
@@ -23,7 +23,7 @@ api.interceptors.request.use(
 
 // 응답
 api.interceptors.response.use(
-  (response) => response.data,
+  (response: AxiosResponse) => response.data,
   (error) => {
     console.error("API error:", error);
     return Promise.reject(error);
