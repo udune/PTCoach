@@ -1,19 +1,38 @@
 import { create } from "zustand";
-import { User } from "@/types";
+import { WorkoutLog, AIRecommendation } from "@/types";
 
-interface AuthState {
-  user: User | null;
-  isAuthenticated: boolean;
-  setUser: (user: User) => void;
-  logout: () => void;
+interface WorkoutState {
+  todayRecommendations: AIRecommendation | null;
+  workoutLogs: WorkoutLog[];
+  setTodayRecommendations: (recommendations: AIRecommendation) => void;
+  setWorkoutLogs: (logs: WorkoutLog[]) => void;
+  completeRoutine: (routineId: number) => void;
 }
 
-const useAuthStore = create<AuthState>((set) => ({
-  user: null,
-  isAuthenticated: false,
+const useWorkoutStore = create<WorkoutState>((set) => ({
+  todayRecommendations: null,
+  workoutLogs: [],
 
-  setUser: (user) => set({ user, isAuthenticated: true }),
-  logout: () => set({ user: null, isAuthenticated: false }),
+  setTodayRecommendations: (recommendations) =>
+    set({ todayRecommendations: recommendations }),
+
+  setWorkoutLogs: (logs) => set({ workoutLogs: logs }),
+
+  completeRoutine: (routineId) =>
+    set((state) => {
+      if (!state.todayRecommendations) return state;
+
+      const updatedRoutines = state.todayRecommendations.routines.map((r) =>
+        r.id === routineId ? { ...r, completed: true } : r
+      );
+
+      return {
+        todayRecommendations: {
+          ...state.todayRecommendations,
+          routines: updatedRoutines,
+        },
+      };
+    }),
 }));
 
-export default useAuthStore;
+export default useWorkoutStore;
