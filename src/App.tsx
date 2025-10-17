@@ -1,4 +1,5 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import Home from "./components/member/Home";
 
 export default function App() {
   return (
@@ -8,7 +9,7 @@ export default function App() {
         <Route path="/" element={<Navigate to="/member" replace />} />
 
         {/* 회원 */}
-        <Route path="/member" element={<div className="p-4">회원 홈</div>} />
+        <Route path="/member" element={<Home />} />
         <Route
           path="/member/workout"
           element={<div className="p-4">운동 페이지</div>}
