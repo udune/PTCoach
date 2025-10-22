@@ -7,8 +7,8 @@ interface WorkoutListProps {
 
 export default function WorkoutList({ routines, onToggle }: WorkoutListProps) {
   return (
-    <div className="bg-white rounded-lg shadow p-6 mb-20">
-      <h2 className="text-xl font-bold text-gray-900 mb-4">
+    <div className="bg-white rounded-lg shadow p-4 sm:p-6 mb-20">
+      <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-4">
         오늘의 AI 추천 운동
       </h2>
 
@@ -16,7 +16,7 @@ export default function WorkoutList({ routines, onToggle }: WorkoutListProps) {
         {routines.map((routine) => (
           <div
             key={routine.id}
-            className="flex items-center gap-3 p-3 hover:bg-gray-50 rounded-lg transition-colors"
+            className="flex items-center gap-2 sm:gap-3 p-2 sm:p-3 hover:bg-gray-50 rounded-lg transition-colors"
           >
             {/* 체크박스 */}
             <input
@@ -27,19 +27,21 @@ export default function WorkoutList({ routines, onToggle }: WorkoutListProps) {
             />
 
             {/* 운동 정보 */}
-            <div className="flex-1">
-              <span
-                className={`font-medium ${
-                  routine.completed
-                    ? "text-gray-400 line-through"
-                    : "text-gray-900"
-                }`}
-              >
-                {routine.name}
-              </span>
-              <span className="ml-3 text-sm text-gray-500">
-                {routine.sets}세트 × {routine.reps}회
-              </span>
+            <div className="flex-1 min-w-0">
+              <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
+                <span
+                  className={`font-medium text-sm sm:text-base ${
+                    routine.completed
+                      ? "text-gray-400 line-through"
+                      : "text-gray-900"
+                  }`}
+                >
+                  {routine.name}
+                </span>
+                <span className="text-xs sm:text-sm text-gray-500">
+                  {routine.sets}세트 × {routine.reps}회
+                </span>
+              </div>
             </div>
           </div>
         ))}
