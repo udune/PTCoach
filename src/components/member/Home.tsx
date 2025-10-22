@@ -27,6 +27,7 @@ export default function Home() {
   const [routines, setRoutines] = useState<WorkoutRoutine[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [workoutLogId, setWorkoutLogId] = useState<number>(1);
 
   useEffect(() => {
     const fetchRecommendations = async () => {
@@ -35,9 +36,9 @@ export default function Home() {
         setError(null);
         const data = await workoutService.getTodayRecommendations(mockUser.id);
         setRoutines(data.routines);
+        setWorkoutLogId(data.id);
       } catch (err) {
         console.error("API 호출 실패, Mock 데이터 사용:", err);
-        setError("추천 운동을 불러올 수 없어 기본 운동을 표시합니다.");
         setRoutines(mockRoutines);
       } finally {
         setIsLoading(false);
@@ -47,14 +48,31 @@ export default function Home() {
     fetchRecommendations();
   }, []);
 
-  const toggleComplete = (id: number) => {
-    setRoutines((prev) =>
-      prev.map((routine) =>
-        routine.id === id
-          ? { ...routine, completed: !routine.completed }
-          : routine
-      )
+  const toggleComplete = async (id: number) => {
+    // 이전 상태 저장 (에러 시 롤백용)
+    const previousRoutines = [...routines];
+
+    // 낙관적 UI 업데이트 (즉시 체크 반영)
+    const updatedRoutines = routines.map((routine) =>
+      routine.id === id
+        ? { ...routine, completed: !routine.completed }
+        : routine
     );
+    setRoutines(updatedRoutines);
+
+    try {
+      // API 호출
+      await workoutService.completeWorkout(workoutLogId, String(id));
+      console.log(`운동 #${id} 완료 기록`);
+    } catch (err) {
+      // Mock 환경에서는 에러 무시 (정상 동작처럼 처리)
+      console.log("운동 완료 기록 (Mock 환경):", err);
+
+      // 실제 환경에서 실제 에러 발생 시 상태 복구
+      if (process.env.NODE_ENV === "production") {
+        setRoutines(previousRoutines);
+      }
+    }
   };
 
   const handleAICoachClick = () => {

@@ -16,14 +16,16 @@ export default function WorkoutList({ routines, onToggle }: WorkoutListProps) {
         {routines.map((routine) => (
           <div
             key={routine.id}
-            className="flex items-center gap-2 sm:gap-3 p-2 sm:p-3 hover:bg-gray-50 rounded-lg transition-colors"
+            className={`flex items-center gap-2 sm:gap-3 p-2 sm:p-3 hover:bg-gray-50 rounded-lg transition-all duration-200 ${
+              routine.completed ? "bg-green-50" : ""
+            }`}
           >
             {/* 체크박스 */}
             <input
               type="checkbox"
               checked={routine.completed}
               onChange={() => onToggle(routine.id)}
-              className="w-5 h-5 text-blue-600 rounded focus:ring-2 focus:ring-blue-500 cursor-pointer"
+              className="w-5 h-5 text-blue-600 rounded focus:ring-2 focus:ring-blue-500 cursor-pointer transition-transform duration-200 hover:scale-110"
             />
 
             {/* 운동 정보 */}

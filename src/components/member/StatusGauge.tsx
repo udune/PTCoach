@@ -49,7 +49,7 @@ function RotatingGauge({ value }: GaugeProps) {
 export default function StatusGauge({ value }: GaugeProps) {
   return (
     <div className="w-20 h-20">
-      <Canvas camera={{ position: [0, 0, 5], fov: 30 }}>
+      <Canvas camera={{ position: [0, 0, 6], fov: 35 }}>
         <ambientLight intensity={0.5} />
         <pointLight position={[10, 10, 10]} intensity={1} />
         <RotatingGauge value={value} />
