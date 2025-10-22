@@ -18,7 +18,11 @@ api.interceptors.request.use(
     }
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => {
+    // Ensure the rejection reason is an Error
+    const err = error instanceof Error ? error : new Error(String(error));
+    return Promise.reject(err);
+  }
 );
 
 // 응답
@@ -26,7 +30,17 @@ api.interceptors.response.use(
   (response: AxiosResponse) => response.data,
   (error) => {
     console.error("API error:", error);
-    return Promise.reject(error);
+    const err =
+      error instanceof Error
+        ? error
+        : new Error(
+            error && error.message
+              ? String(error.message)
+              : typeof error === "string"
+              ? error
+              : JSON.stringify(error)
+          );
+    return Promise.reject(err);
   }
 );
 

@@ -1,6 +1,7 @@
 import { User, WorkoutRoutine } from "@/types";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { workoutService } from "@/services/workoutService";
 import Header from "../common/Header";
 import StatusGauge from "./StatusGauge";
 import WorkoutList from "./WorkoutList";
@@ -23,7 +24,28 @@ const mockRoutines: WorkoutRoutine[] = [
 
 export default function Home() {
   const navigate = useNavigate();
-  const [routines, setRoutines] = useState<WorkoutRoutine[]>(mockRoutines);
+  const [routines, setRoutines] = useState<WorkoutRoutine[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchRecommendations = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
+        const data = await workoutService.getTodayRecommendations(mockUser.id);
+        setRoutines(data.routines);
+      } catch (err) {
+        console.error("API 호출 실패, Mock 데이터 사용:", err);
+        setError("추천 운동을 불러올 수 없어 기본 운동을 표시합니다.");
+        setRoutines(mockRoutines);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchRecommendations();
+  }, []);
 
   const toggleComplete = (id: number) => {
     setRoutines((prev) =>
@@ -57,8 +79,25 @@ export default function Home() {
           </div>
         </div>
 
-        {/* 오늘의 AI 추천 운동 리스트 */}
-        <WorkoutList routines={routines} onToggle={toggleComplete} />
+        {/* 에러 메시지 */}
+        {error && (
+          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 mb-4">
+            <p className="text-sm text-yellow-800">{error}</p>
+          </div>
+        )}
+
+        {/* 로딩 상태 */}
+        {isLoading ? (
+          <div className="bg-white rounded-lg shadow p-4 sm:p-6 mb-20">
+            <div className="flex flex-col items-center justify-center py-12">
+              <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mb-4"></div>
+              <p className="text-gray-600 text-sm">오늘의 운동을 불러오는 중...</p>
+            </div>
+          </div>
+        ) : (
+          /* 오늘의 AI 추천 운동 리스트 */
+          <WorkoutList routines={routines} onToggle={toggleComplete} />
+        )}
 
         {/* AI 코치 플로팅 버튼 */}
         <button
