@@ -1,5 +1,5 @@
 import api from "./api";
-import { AIRecommendation, WorkoutLog } from "@/types";
+import { AIRecommendation, WorkoutLog, CreateLogRequest, LogResponse } from "@/types";
 
 export const workoutService = {
   // 오늘의 AI 추천 운동 조회
@@ -26,5 +26,25 @@ export const workoutService = {
         endDate,
       },
     });
+  },
+
+  // 운동 기록 생성
+  createLog: async (logData: CreateLogRequest): Promise<LogResponse> => {
+    return api.post("/logs", logData);
+  },
+
+  // 특정 운동 기록 조회
+  getLog: async (id: number): Promise<LogResponse> => {
+    return api.get(`/logs/${id}`);
+  },
+
+  // 사용자별 운동 기록 조회
+  getUserLogs: async (userId: number): Promise<LogResponse[]> => {
+    return api.get(`/logs/user/${userId}`);
+  },
+
+  // 헬스 체크
+  healthCheck: async (): Promise<{ status: string }> => {
+    return api.get("/health");
   },
 };

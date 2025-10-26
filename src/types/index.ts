@@ -62,3 +62,25 @@ export interface MemberSummary {
   lastWorkoutDate: string;
   WeeklyCompletionRate: number;
 }
+
+// 운동 기록 생성 요청 타입
+export interface CreateLogRequest {
+  userId: number;
+  exerciseId: number;
+  sets: number;
+  reps: number;
+  completed: boolean;
+  workoutDate: string;
+}
+
+// 운동 기록 응답 타입
+export interface LogResponse {
+  id: number;
+  userId: number;
+  exerciseId: number;
+  sets: number;
+  reps: number;
+  completed: boolean;
+  workoutDate: string;
+  createdAt?: string;
+}

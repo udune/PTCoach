@@ -27,7 +27,6 @@ export default function Home() {
   const [routines, setRoutines] = useState<WorkoutRoutine[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [workoutLogId, setWorkoutLogId] = useState<number>(1);
 
   useEffect(() => {
     const fetchRecommendations = async () => {
@@ -36,7 +35,6 @@ export default function Home() {
         setError(null);
         const data = await workoutService.getTodayRecommendations(mockUser.id);
         setRoutines(data.routines);
-        setWorkoutLogId(data.id);
       } catch (err) {
         console.error("API 호출 실패, Mock 데이터 사용:", err);
         setRoutines(mockRoutines);
@@ -49,29 +47,34 @@ export default function Home() {
   }, []);
 
   const toggleComplete = async (id: number) => {
-    // 이전 상태 저장 (에러 시 롤백용)
     const previousRoutines = [...routines];
+    const routine = routines.find((r) => r.id === id);
+    if (!routine) return;
 
-    // 낙관적 UI 업데이트 (즉시 체크 반영)
-    const updatedRoutines = routines.map((routine) =>
-      routine.id === id
-        ? { ...routine, completed: !routine.completed }
-        : routine
+    const updatedRoutines = routines.map((r) =>
+      r.id === id ? { ...r, completed: !r.completed } : r
     );
     setRoutines(updatedRoutines);
 
     try {
-      // API 호출
-      await workoutService.completeWorkout(workoutLogId, String(id));
-      console.log(`운동 #${id} 완료 기록`);
-    } catch (err) {
-      // Mock 환경에서는 에러 무시 (정상 동작처럼 처리)
-      console.log("운동 완료 기록 (Mock 환경):", err);
-
-      // 실제 환경에서 실제 에러 발생 시 상태 복구
-      if (process.env.NODE_ENV === "production") {
-        setRoutines(previousRoutines);
-      }
+      const logData = {
+        userId: mockUser.id,
+        exerciseId: routine.id,
+        sets: routine.sets,
+        reps: routine.reps,
+        completed: !routine.completed,
+        workoutDate: new Date().toISOString().split("T")[0],
+      };
+      console.log("전송할 데이터:", logData);
+      const response = await workoutService.createLog(logData);
+      console.log(`운동 기록 저장 완료:`, response);
+    } catch (err: any) {
+      console.error("운동 기록 저장 실패:", err);
+      console.error("에러 응답:", err.response?.data);
+      console.error("상태 코드:", err.response?.status);
+      setRoutines(previousRoutines);
+      const errorMessage = err.response?.data?.message || "운동 기록 저장에 실패했습니다.";
+      setError(errorMessage);
     }
   };
 
