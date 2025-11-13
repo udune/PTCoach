@@ -1,5 +1,6 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Home from "./components/member/Home";
+import WorkoutLog from "./components/member/WorkoutLog";
 
 export default function App() {
   return (
@@ -14,6 +15,7 @@ export default function App() {
           path="/member/workout"
           element={<div className="p-4">운동 페이지</div>}
         />
+        <Route path="/member/log" element={<WorkoutLog />} />
         <Route
           path="/member/inbody"
           element={<div className="p-4">인바디 페이지</div>}
