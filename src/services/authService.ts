@@ -5,7 +5,7 @@ export const authService = {
   // 로그인
   login: async (credentials: LoginRequest): Promise<TokenResponse> => {
     const response = await api.post("/auth/login", credentials);
-    return response;
+    return response.data;
   },
 
   // 로그아웃
