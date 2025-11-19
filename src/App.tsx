@@ -1,11 +1,15 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Home from "./components/member/Home";
 import WorkoutLog from "./components/member/WorkoutLog";
+import Login from "./components/auth/Login";
 
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
+        {/* 인증 */}
+        <Route path="/login" element={<Login />} />
+
         {/* 기본 */}
         <Route path="/" element={<Navigate to="/member" replace />} />
 

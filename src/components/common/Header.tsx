@@ -1,4 +1,6 @@
 import { User } from "@/types";
+import { useNavigate } from "react-router-dom";
+import useAuthStore from "@/store/authStore";
 
 interface HeaderProps {
   user: User;
@@ -6,6 +8,14 @@ interface HeaderProps {
 }
 
 export default function Header({ user, onNotificationClick }: HeaderProps) {
+  const navigate = useNavigate();
+  const { logout } = useAuthStore();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
+
   return (
     <header className="bg-white shadow-sm px-4 sm:px-6 lg:px-8 py-3">
       <div className="flex items-center justify-between max-w-screen-xl mx-auto">
@@ -20,12 +30,13 @@ export default function Header({ user, onNotificationClick }: HeaderProps) {
           </div>
         </div>
 
-        {/* 오른쪽: 알림 아이콘 */}
-        <button
-          onClick={onNotificationClick}
-          className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 active:bg-gray-300 transition-colors"
-          aria-label="알림"
-        >
+        {/* 오른쪽: 알림 및 로그아웃 */}
+        <div className="flex items-center gap-2">
+          <button
+            onClick={onNotificationClick}
+            className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 active:bg-gray-300 transition-colors"
+            aria-label="알림"
+          >
           <svg
             className="w-5 h-5 sm:w-6 sm:h-6 text-gray-600"
             fill="none"
@@ -40,6 +51,15 @@ export default function Header({ user, onNotificationClick }: HeaderProps) {
             />
           </svg>
         </button>
+
+        <button
+          onClick={handleLogout}
+          className="px-3 py-1.5 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+          aria-label="로그아웃"
+        >
+          로그아웃
+        </button>
+        </div>
       </div>
     </header>
   );
