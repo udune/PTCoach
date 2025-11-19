@@ -54,7 +54,11 @@ export default function WorkoutLog() {
     setSelectedDateLog(log || null);
   };
 
-  const handleMonthChange = ({ activeStartDate }: { activeStartDate: Date | null }) => {
+  const handleMonthChange = ({
+    activeStartDate,
+  }: {
+    activeStartDate: Date | null;
+  }) => {
     if (activeStartDate) {
       setCurrentMonth(activeStartDate);
     }
