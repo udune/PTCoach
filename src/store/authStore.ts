@@ -1,38 +1,43 @@
 import { create } from "zustand";
-import { WorkoutLog, AIRecommendation } from "@/types";
+import { User } from "@/types";
+import { authService } from "@/services/authService";
 
-interface WorkoutState {
-  todayRecommendations: AIRecommendation | null;
-  workoutLogs: WorkoutLog[];
-  setTodayRecommendations: (recommendations: AIRecommendation) => void;
-  setWorkoutLogs: (logs: WorkoutLog[]) => void;
-  completeRoutine: (routineId: number) => void;
+interface AuthState {
+  user: User | null;
+  token: string | null;
+  isAuthenticated: boolean;
+  setUser: (user: User | null) => void;
+  setToken: (token: string | null) => void;
+  login: (user: User, token: string) => void;
+  logout: () => void;
+  initAuth: () => void;
 }
 
-const useWorkoutStore = create<WorkoutState>((set) => ({
-  todayRecommendations: null,
-  workoutLogs: [],
+const useAuthStore = create<AuthState>((set) => ({
+  user: null,
+  token: null,
+  isAuthenticated: false,
 
-  setTodayRecommendations: (recommendations) =>
-    set({ todayRecommendations: recommendations }),
+  setUser: (user) => set({ user, isAuthenticated: !!user }),
 
-  setWorkoutLogs: (logs) => set({ workoutLogs: logs }),
+  setToken: (token) => set({ token }),
 
-  completeRoutine: (routineId) =>
-    set((state) => {
-      if (!state.todayRecommendations) return state;
+  login: (user, token) => {
+    authService.saveToken(token);
+    set({ user, token, isAuthenticated: true });
+  },
 
-      const updatedRoutines = state.todayRecommendations.routines.map((r) =>
-        r.id === routineId ? { ...r, completed: true } : r
-      );
+  logout: () => {
+    authService.logout();
+    set({ user: null, token: null, isAuthenticated: false });
+  },
 
-      return {
-        todayRecommendations: {
-          ...state.todayRecommendations,
-          routines: updatedRoutines,
-        },
-      };
-    }),
+  initAuth: () => {
+    const token = authService.getToken();
+    if (token) {
+      set({ token, isAuthenticated: true });
+    }
+  },
 }));
 
-export default useWorkoutStore;
+export default useAuthStore;

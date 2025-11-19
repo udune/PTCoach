@@ -84,3 +84,15 @@ export interface LogResponse {
   workoutDate: string;
   createdAt?: string;
 }
+
+// 로그인 요청 타입
+export interface LoginRequest {
+  email: string;
+  password: string;
+}
+
+// 토큰 응답 타입
+export interface TokenResponse {
+  token: string;
+  user: User;
+}
