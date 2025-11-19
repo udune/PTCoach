@@ -15,6 +15,9 @@ api.interceptors.request.use(
     const token = localStorage.getItem("token");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
+    } else if (import.meta.env.DEV) {
+      // 개발 환경에서 테스트용 토큰 (실제 환경에서는 제거)
+      console.warn("⚠️ 개발 환경: 인증 토큰이 없습니다. 백엔드에서 테스트 토큰을 발급받으세요.");
     }
     return config;
   },

@@ -10,4 +10,13 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  server: {
+    proxy: {
+      '/api': {
+        target: 'https://fitness-coaching-api-398791061190.asia-northeast3.run.app',
+        changeOrigin: true,
+        secure: true,
+      },
+    },
+  },
 })
