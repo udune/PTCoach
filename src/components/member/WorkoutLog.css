@@ -1,0 +1,184 @@
+.workout-log-container {
+  min-height: 100vh;
+  background-color: #f9fafb;
+}
+
+.workout-log-main {
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 1.5rem 1rem;
+}
+
+.workout-log-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #111827;
+  margin-bottom: 1.5rem;
+}
+
+.workout-log-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+.calendar-card {
+  background: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+}
+
+.calendar-card .react-calendar {
+  width: 100%;
+  border: none;
+}
+
+.detail-card {
+  background: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+}
+
+.detail-card h2 {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #111827;
+  margin-bottom: 1rem;
+}
+
+.completion-section {
+  margin-bottom: 1rem;
+}
+
+.completion-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.completion-header span {
+  color: #4b5563;
+}
+
+.completion-rate {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #2563eb;
+}
+
+.completion-bar {
+  width: 100%;
+  background-color: #e5e7eb;
+  border-radius: 9999px;
+  height: 0.5rem;
+}
+
+.completion-progress {
+  background-color: #2563eb;
+  height: 0.5rem;
+  border-radius: 9999px;
+  transition: width 0.3s;
+}
+
+.routine-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.routine-list h3 {
+  font-weight: 600;
+  color: #111827;
+}
+
+.routine-item {
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  border: 1px solid #e5e7eb;
+  background-color: #f9fafb;
+}
+
+.routine-item.completed {
+  background-color: #f0fdf4;
+  border-color: #bbf7d0;
+}
+
+.routine-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.routine-info p {
+  font-weight: 500;
+  color: #111827;
+}
+
+.routine-info .routine-details {
+  font-size: 0.875rem;
+  color: #4b5563;
+}
+
+.routine-check {
+  color: #16a34a;
+  font-size: 1.25rem;
+}
+
+.no-log {
+  text-align: center;
+  padding: 3rem 0;
+}
+
+.no-log p {
+  color: #6b7280;
+}
+
+.tile-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 0.25rem;
+}
+
+.tile-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background-color: #e5e7eb;
+}
+
+.tile-dot.full {
+  background-color: #22c55e;
+}
+
+.tile-dot.half {
+  background-color: #eab308;
+}
+
+.tile-dot.low {
+  background-color: #ef4444;
+}
+
+.tile-percent {
+  font-size: 0.75rem;
+  color: #4b5563;
+}
+
+@media (min-width: 640px) {
+  .workout-log-main {
+    padding: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .workout-log-main {
+    padding: 1.5rem 2rem;
+  }
+
+  .workout-log-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}

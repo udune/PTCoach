@@ -4,6 +4,7 @@ import { User } from "@/types";
 import { workoutService } from "@/services/workoutService";
 import useWorkoutStore from "@/store/workoutStore";
 import Header from "../common/Header";
+import "./WorkoutLog.css";
 
 const mockUser: User = {
   id: 1,
@@ -71,42 +72,39 @@ export default function WorkoutLog() {
     if (!log) return null;
 
     const completionRate = log.completionRate;
-    let colorClass = "bg-gray-200";
-    if (completionRate === 100) colorClass = "bg-green-500";
-    else if (completionRate >= 50) colorClass = "bg-yellow-500";
-    else if (completionRate > 0) colorClass = "bg-red-500";
+    let colorClass = "";
+    if (completionRate === 100) colorClass = "full";
+    else if (completionRate >= 50) colorClass = "half";
+    else if (completionRate > 0) colorClass = "low";
 
     return (
-      <div className="flex flex-col items-center mt-1">
-        <div className={`w-2 h-2 rounded-full ${colorClass}`}></div>
-        <span className="text-xs text-gray-600">{completionRate}%</span>
+      <div className="tile-content">
+        <div className={`tile-dot ${colorClass}`}></div>
+        <span className="tile-percent">{completionRate}%</span>
       </div>
     );
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="workout-log-container">
       <Header user={mockUser} onNotificationClick={() => {}} />
 
-      <main className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <h1 className="text-2xl font-bold text-gray-900 mb-6">운동 기록</h1>
+      <main className="workout-log-main">
+        <h1 className="workout-log-title">운동 기록</h1>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* 달력 */}
-          <div className="bg-white rounded-lg shadow p-6">
+        <div className="workout-log-grid">
+          <div className="calendar-card">
             <Calendar
               onChange={handleDateClick}
               value={selectedDate}
               onActiveStartDateChange={handleMonthChange}
               tileContent={getTileContent}
-              className="w-full border-none"
               locale="ko-KR"
             />
           </div>
 
-          {/* 선택된 날짜의 상세 정보 */}
-          <div className="bg-white rounded-lg shadow p-6">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">
+          <div className="detail-card">
+            <h2>
               {selectedDate.toLocaleDateString("ko-KR", {
                 year: "numeric",
                 month: "long",
@@ -116,43 +114,37 @@ export default function WorkoutLog() {
 
             {selectedDateLog ? (
               <div>
-                <div className="mb-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-gray-600">완료율</span>
-                    <span className="text-2xl font-bold text-blue-600">
+                <div className="completion-section">
+                  <div className="completion-header">
+                    <span>완료율</span>
+                    <span className="completion-rate">
                       {selectedDateLog.completionRate}%
                     </span>
                   </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div className="completion-bar">
                     <div
-                      className="bg-blue-600 h-2 rounded-full transition-all"
+                      className="completion-progress"
                       style={{ width: `${selectedDateLog.completionRate}%` }}
                     ></div>
                   </div>
                 </div>
 
-                <div className="space-y-3">
-                  <h3 className="font-semibold text-gray-900">운동 목록</h3>
+                <div className="routine-list">
+                  <h3>운동 목록</h3>
                   {selectedDateLog.routines.map((routine) => (
                     <div
                       key={routine.id}
-                      className={`p-3 rounded-lg border ${
-                        routine.completed
-                          ? "bg-green-50 border-green-200"
-                          : "bg-gray-50 border-gray-200"
-                      }`}
+                      className={`routine-item ${routine.completed ? "completed" : ""}`}
                     >
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <p className="font-medium text-gray-900">
-                            {routine.name}
-                          </p>
-                          <p className="text-sm text-gray-600">
+                      <div className="routine-content">
+                        <div className="routine-info">
+                          <p>{routine.name}</p>
+                          <p className="routine-details">
                             {routine.sets} 세트 × {routine.reps} 회
                           </p>
                         </div>
                         {routine.completed && (
-                          <span className="text-green-600 text-xl">✓</span>
+                          <span className="routine-check">✓</span>
                         )}
                       </div>
                     </div>
@@ -160,8 +152,8 @@ export default function WorkoutLog() {
                 </div>
               </div>
             ) : (
-              <div className="text-center py-12">
-                <p className="text-gray-500">운동 기록이 없습니다.</p>
+              <div className="no-log">
+                <p>운동 기록이 없습니다.</p>
               </div>
             )}
           </div>

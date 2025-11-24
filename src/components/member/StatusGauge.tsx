@@ -2,6 +2,7 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { Text } from "@react-three/drei";
 import { useRef } from "react";
 import * as THREE from "three";
+import "./StatusGauge.css";
 
 interface GaugeProps {
   value: number;
@@ -48,7 +49,7 @@ function RotatingGauge({ value }: GaugeProps) {
 
 export default function StatusGauge({ value }: GaugeProps) {
   return (
-    <div className="w-20 h-20">
+    <div className="status-gauge">
       <Canvas camera={{ position: [0, 0, 6], fov: 35 }}>
         <ambientLight intensity={0.5} />
         <pointLight position={[10, 10, 10]} intensity={1} />
