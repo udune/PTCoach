@@ -1,0 +1,111 @@
+.workout-list-container {
+  background: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  margin-bottom: 5rem;
+}
+
+.workout-list-title {
+  font-size: 1.125rem;
+  font-weight: bold;
+  color: #111827;
+  margin-bottom: 1rem;
+}
+
+.workout-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.workout-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  transition: all 0.2s;
+}
+
+.workout-item:hover {
+  background-color: #f9fafb;
+}
+
+.workout-item.completed {
+  background-color: #f0fdf4;
+}
+
+.workout-checkbox {
+  width: 1.25rem;
+  height: 1.25rem;
+  accent-color: #2563eb;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.workout-checkbox:hover {
+  transform: scale(1.1);
+}
+
+.workout-checkbox:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+.workout-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.workout-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.workout-name {
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: #111827;
+}
+
+.workout-name.completed {
+  color: #9ca3af;
+  text-decoration: line-through;
+}
+
+.workout-sets {
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+@media (min-width: 640px) {
+  .workout-list-container {
+    padding: 1.5rem;
+  }
+
+  .workout-list-title {
+    font-size: 1.25rem;
+  }
+
+  .workout-item {
+    gap: 0.75rem;
+    padding: 0.75rem;
+  }
+
+  .workout-details {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .workout-name {
+    font-size: 1rem;
+  }
+
+  .workout-sets {
+    font-size: 0.875rem;
+  }
+}

@@ -2,6 +2,7 @@ import { useState, FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { authService } from "@/services/authService";
 import useAuthStore from "@/store/authStore";
+import "./Login.css";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -21,7 +22,6 @@ export default function Login() {
       const response = await authService.login({ email, password });
       login(response.user, response.token);
 
-      // 역할에 따라 리다이렉트
       if (response.user.role === "trainer") {
         navigate("/trainer");
       } else {
@@ -36,16 +36,16 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center px-4">
-      <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-8">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">PTCoach</h1>
-          <p className="text-gray-600 mt-2">AI 기반 피트니스 코칭</p>
+    <div className="login-container">
+      <div className="login-card">
+        <div className="login-header">
+          <h1 className="login-title">PTCoach</h1>
+          <p className="login-subtitle">AI 기반 피트니스 코칭</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+        <form onSubmit={handleSubmit} className="login-form">
+          <div className="form-group">
+            <label htmlFor="email" className="form-label">
               이메일
             </label>
             <input
@@ -54,13 +54,13 @@ export default function Login() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="form-input"
               placeholder="email@example.com"
             />
           </div>
 
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+          <div className="form-group">
+            <label htmlFor="password" className="form-label">
               비밀번호
             </label>
             <input
@@ -69,13 +69,13 @@ export default function Login() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="form-input"
               placeholder="••••••••"
             />
           </div>
 
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm">
+            <div className="error-message">
               {error}
             </div>
           )}
@@ -83,7 +83,7 @@ export default function Login() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
+            className="login-button"
           >
             {loading ? "로그인 중..." : "로그인"}
           </button>
