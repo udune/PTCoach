@@ -5,6 +5,7 @@ import { workoutService } from "@/services/workoutService";
 import Header from "../common/Header";
 import StatusGauge from "./StatusGauge";
 import WorkoutList from "./WorkoutList";
+import "./Home.css";
 
 const mockUser: User = {
   id: 1,
@@ -65,13 +66,10 @@ export default function Home() {
         completed: !routine.completed,
         workoutDate: new Date().toISOString().split("T")[0],
       };
-      console.log("전송할 데이터:", logData);
       const response = await workoutService.createLog(logData);
-      console.log(`운동 기록 저장 완료:`, response);
+      console.log("운동 기록 저장 완료:", response);
     } catch (err: any) {
       console.error("운동 기록 저장 실패:", err);
-      console.error("에러 응답:", err.response?.data);
-      console.error("상태 코드:", err.response?.status);
       setRoutines(previousRoutines);
       const errorMessage = err.response?.data?.message || "운동 기록 저장에 실패했습니다.";
       setError(errorMessage);
@@ -83,50 +81,43 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="home-container">
       <Header user={mockUser} onNotificationClick={() => {}} />
 
-      <main className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        {/* 3D 상태 요약 위젯 */}
-        <div className="bg-white rounded-lg shadow p-4 sm:p-6 mb-6">
-          <div className="flex items-center gap-4 sm:gap-6">
+      <main className="home-main">
+        <div className="status-widget">
+          <div className="status-content">
             <StatusGauge value={75} />
-            <div>
-              <h2 className="text-base sm:text-lg font-bold text-gray-900">
-                현재 대사 효율
-              </h2>
-              <p className="text-sm text-gray-600">좋음</p>
+            <div className="status-info">
+              <h2>현재 대사 효율</h2>
+              <p>좋음</p>
             </div>
           </div>
         </div>
 
-        {/* 에러 메시지 */}
         {error && (
-          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 mb-4">
-            <p className="text-sm text-yellow-800">{error}</p>
+          <div className="error-banner">
+            <p>{error}</p>
           </div>
         )}
 
-        {/* 로딩 상태 */}
         {isLoading ? (
-          <div className="bg-white rounded-lg shadow p-4 sm:p-6 mb-20">
-            <div className="flex flex-col items-center justify-center py-12">
-              <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mb-4"></div>
-              <p className="text-gray-600 text-sm">오늘의 운동을 불러오는 중...</p>
+          <div className="loading-container">
+            <div className="loading-content">
+              <div className="loading-spinner"></div>
+              <p className="loading-text">오늘의 운동을 불러오는 중...</p>
             </div>
           </div>
         ) : (
-          /* 오늘의 AI 추천 운동 리스트 */
           <WorkoutList routines={routines} onToggle={toggleComplete} />
         )}
 
-        {/* AI 코치 플로팅 버튼 */}
         <button
           onClick={handleAICoachClick}
-          className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 w-14 h-14 sm:w-16 sm:h-16 bg-blue-600 rounded-full shadow-2xl flex items-center justify-center hover:bg-blue-700 hover:scale-110 transition-all duration-200 active:scale-95"
+          className="ai-coach-button"
           aria-label="AI 코치"
         >
-          <span className="text-2xl sm:text-3xl">💬</span>
+          <span>💬</span>
         </button>
       </main>
     </div>
